@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-Muse Foundations Dashboard</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --bg-accent: #eef4ef;
+      --surface: rgba(255, 255, 255, 0.9);
+      --surface-strong: #ffffff;
+      --line: rgba(26, 42, 55, 0.08);
+      --text: #152231;
+      --muted: #6b7785;
+      --ink-soft: #324356;
+      --blue: #4c9de8;
+      --green: #5ab58f;
+      --coral: #f17b72;
+      --gold: #f1c86a;
+      --teal: #5bc2bf;
+      --shadow: 0 22px 48px rgba(34, 52, 69, 0.09);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(91, 194, 191, 0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(76, 157, 232, 0.14), transparent 22%),
+        linear-gradient(180deg, #f7f9fb 0%, #eef2f6 100%);
+      color: var(--text);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      filter: blur(28px);
+      opacity: 0.34;
+      pointer-events: none;
+    }
+
+    body::before {
+      top: -90px;
+      left: -90px;
+      background: rgba(91, 194, 191, 0.14);
+    }
+
+    body::after {
+      right: -40px;
+      top: 180px;
+      background: rgba(76, 157, 232, 0.12);
+    }
+
+    .shell {
+      width: 1480px;
+      margin: 28px auto 36px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.46);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 260px 1fr 320px;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 12px 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(76, 157, 232, 0.95), rgba(91, 194, 191, 0.85));
+      box-shadow: 0 12px 28px rgba(76, 157, 232, 0.28);
+    }
+
+    .brand-mark svg {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .brand-copy small {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .brand-copy h1 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: -0.04em;
+    }
+
+    .tabs {
+      justify-self: center;
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      background: rgba(244, 246, 248, 0.95);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .tab {
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .tab.active {
+      color: var(--text);
+      background: white;
+      box-shadow: 0 10px 22px rgba(24, 38, 53, 0.08);
+    }
+
+    .search {
+      position: relative;
+      height: 50px;
+    }
+
+    .search input {
+      width: 100%;
+      height: 100%;
+      padding: 0 18px 0 46px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      font: inherit;
+      color: var(--ink-soft);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .search svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      transform: translateY(-50%);
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 286px 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid rgba(20, 34, 49, 0.06);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 252, 253, 0.9));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent 30%);
+      pointer-events: none;
+    }
+
+    .sidebar {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .sidebar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar h2,
+    .section-title {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .eyebrow {
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+    }
+
+    .clear-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      background: rgba(76, 157, 232, 0.1);
+    }
+
+    .filter-group {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(20, 34, 49, 0.06);
+      background: rgba(246, 249, 250, 0.72);
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      background: white;
+      border: 1px solid rgba(20, 34, 49, 0.08);
+    }
+
+    .chip.active {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      border-color: transparent;
+    }
+
+    .range-box {
+      display: grid;
+      gap: 10px;
+    }
+
+    .range-track {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(21, 34, 49, 0.08);
+    }
+
+    .range-fill {
+      position: absolute;
+      inset: 0 auto 0 18%;
+      width: 55%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .range-fill.energy {
+      left: 38%;
+      width: 41%;
+      background: linear-gradient(90deg, var(--gold), var(--coral));
+    }
+
+    .knob {
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 4px 12px rgba(20, 34, 49, 0.16);
+      border: 1px solid rgba(20, 34, 49, 0.1);
+    }
+
+    .range-fill .knob:first-child {
+      left: 0;
+    }
+
+    .range-fill .knob:last-child {
+      left: 100%;
+    }
+
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .year-slider {
+      height: 70px;
+      display: grid;
+      align-items: end;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .year-slider span {
+      display: block;
+      border-radius: 999px 999px 10px 10px;
+      background: linear-gradient(180deg, rgba(91, 194, 191, 0.18), rgba(76, 157, 232, 0.5));
+    }
+
+    .year-slider span:nth-child(1) { height: 18px; }
+    .year-slider span:nth-child(2) { height: 24px; }
+    .year-slider span:nth-child(3) { height: 35px; }
+    .year-slider span:nth-child(4) { height: 54px; }
+    .year-slider span:nth-child(5) { height: 48px; }
+    .year-slider span:nth-child(6) { height: 29px; }
+    .year-slider span:nth-child(7) { height: 21px; }
+
+    .sidebar-note {
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(76, 157, 232, 0.1), rgba(91, 194, 191, 0.14));
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .main {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .overview-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    .section-copy p,
+    .section-meta {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(246, 249, 250, 0.84);
+      border: 1px solid rgba(20, 34, 49, 0.06);
+    }
+
+    .metric-label {
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 30px;
+      letter-spacing: -0.04em;
+    }
+
+    .metric small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric.blue strong { color: var(--blue); }
+    .metric.green strong { color: var(--green); }
+    .metric.coral strong { color: var(--coral); }
+    .metric.gold strong { color: #c58d16; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 0 0 14px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    tbody td {
+      padding: 16px 0;
+      border-top: 1px solid rgba(20, 34, 49, 0.08);
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+
+    tbody tr:first-child td {
+      border-top: 1px solid rgba(20, 34, 49, 0.08);
+    }
+
+    .genre-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(91, 194, 191, 0.12);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+
+    .genre-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .detail-panel {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      background:
+        radial-gradient(circle at top right, rgba(241, 200, 106, 0.2), transparent 26%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 252, 253, 0.95));
+    }
+
+    .selected-song {
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(244, 246, 248, 0.86);
+      border: 1px solid rgba(20, 34, 49, 0.06);
+    }
+
+    .selected-song h3 {
+      margin: 4px 0;
+      font-size: 26px;
+      letter-spacing: -0.04em;
+    }
+
+    .selected-song p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stat-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 40px;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(20, 34, 49, 0.08);
+      overflow: hidden;
+    }
+
+    .bar > span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+
+    .bar.energy > span { background: linear-gradient(90deg, var(--gold), var(--coral)); }
+    .bar.valence > span { background: linear-gradient(90deg, var(--green), var(--gold)); }
+
+    .similar-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .similar-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(246, 249, 250, 0.86);
+      border: 1px solid rgba(20, 34, 49, 0.06);
+    }
+
+    .similar-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .similar-item span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .similar-score {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      background: rgba(76, 157, 232, 0.12);
+    }
+
+    .network-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 18px;
+    }
+
+    .network-panel {
+      padding: 22px;
+      min-height: 470px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(76, 157, 232, 0.08), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(91, 194, 191, 0.08), transparent 20%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 252, 253, 0.94));
+    }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(246, 249, 250, 0.86);
+      border: 1px solid rgba(20, 34, 49, 0.06);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend .pop { background: var(--blue); }
+    .legend .indie { background: var(--green); }
+    .legend .rnb { background: var(--coral); }
+    .legend .alt { background: var(--gold); }
+
+    .network-stage {
+      position: relative;
+      height: 340px;
+      margin-top: 18px;
+      border-radius: 26px;
+      background:
+        linear-gradient(180deg, rgba(244, 246, 248, 0.9), rgba(241, 244, 247, 0.82));
+      border: 1px solid rgba(20, 34, 49, 0.06);
+      overflow: hidden;
+    }
+
+    .network-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(21, 34, 49, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(21, 34, 49, 0.04) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent 92%);
+    }
+
+    .tooltip {
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      width: 230px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(20, 34, 49, 0.08);
+      box-shadow: 0 16px 36px rgba(34, 52, 69, 0.14);
+    }
+
+    .tooltip small {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tooltip strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .tooltip p {
+      margin: 0 0 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .tooltip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .tooltip-grid div {
+      padding: 8px;
+      border-radius: 12px;
+      background: rgba(244, 246, 248, 0.9);
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .tooltip-grid strong {
+      margin: 0 0 2px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .compare-panel {
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .chart-card {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(246, 249, 250, 0.84);
+      border: 1px solid rgba(20, 34, 49, 0.06);
+    }
+
+    .compare-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 82px 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .track {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(20, 34, 49, 0.08);
+      overflow: hidden;
+    }
+
+    .track span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .track.a span {
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+
+    .track.b span {
+      background: linear-gradient(90deg, var(--gold), var(--coral));
+    }
+
+    .compare-key {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .compare-key span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compare-key i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .compare-key .a { background: var(--blue); }
+    .compare-key .b { background: var(--coral); }
+
+    .footer-hint {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(246, 249, 250, 0.78);
+      border: 1px solid rgba(20, 34, 49, 0.06);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-hint strong {
+      color: var(--text);
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid rgba(20, 34, 49, 0.08);
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .icon-button svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 18V6l10-2v12"></path>
+            <circle cx="7" cy="18" r="3"></circle>
+            <circle cx="17" cy="16" r="3"></circle>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <small>Research Dashboard</small>
+          <h1>U-Muse Foundations</h1>
+        </div>
+      </div>
+
+      <nav class="tabs" aria-label="Primary">
+        <div class="tab active">Dataset</div>
+        <div class="tab">Network View</div>
+        <div class="tab">Song Analysis</div>
+      </nav>
+
+      <label class="search" aria-label="Search songs or artists">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6"></circle>
+          <path d="M20 20l-4.2-4.2"></path>
+        </svg>
+        <input type="text" value="Search a song or artist..." />
+      </label>
+    </header>
+
+    <section class="dashboard">
+      <aside class="card sidebar">
+        <div class="sidebar-head">
+          <div>
+            <div class="eyebrow">Filters Sidebar</div>
+            <h2>Explore the dataset</h2>
+          </div>
+          <div class="clear-pill">Reset</div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Genre</div>
+          <div class="chip-row">
+            <div class="chip active">All</div>
+            <div class="chip">Pop</div>
+            <div class="chip">Indie</div>
+            <div class="chip">R&amp;B</div>
+            <div class="chip">Alt</div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Release year</div>
+          <div class="year-slider" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="scale">
+            <span>2012</span>
+            <span>2025</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Tempo range</div>
+          <div class="range-box">
+            <div class="range-track">
+              <div class="range-fill">
+                <div class="knob"></div>
+                <div class="knob"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <span>82 BPM</span>
+              <span>145 BPM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Energy level</div>
+          <div class="range-box">
+            <div class="range-track">
+              <div class="range-fill energy">
+                <div class="knob"></div>
+                <div class="knob"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <span>0.38</span>
+              <span>0.79</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-note">
+          Narrow the network to inspect how musical traits cluster. The interface emphasizes research workflows over listening or playback.
+        </div>
+      </aside>
+
+      <div class="main">
+        <section class="hero">
+          <article class="card panel overview-panel">
+            <div class="section-head">
+              <div class="section-copy">
+                <div class="eyebrow">Dataset Overview</div>
+                <h2 class="section-title">Musical similarity at a glance</h2>
+                <p>Summary metrics and a preview table give researchers a quick read on the composition of the collection.</p>
+              </div>
+              <div class="icon-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v18"></path>
+                  <path d="M3 12h18"></path>
+                </svg>
+                Add slice
+              </div>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric blue">
+                <div class="metric-label">Total Songs</div>
+                <strong>12,480</strong>
+                <small>+8.2% from previous import</small>
+              </div>
+              <div class="metric green">
+                <div class="metric-label">Artists</div>
+                <strong>2,142</strong>
+                <small>Cross-genre representation</small>
+              </div>
+              <div class="metric coral">
+                <div class="metric-label">Genres</div>
+                <strong>26</strong>
+                <small>Clustered into 4 major groups</small>
+              </div>
+              <div class="metric gold">
+                <div class="metric-label">Average Tempo</div>
+                <strong>118</strong>
+                <small>Median danceability 0.67</small>
+              </div>
+            </div>
+
+            <div>
+              <div class="section-head" style="margin-bottom: 14px;">
+                <div>
+                  <h2 class="section-title">Dataset preview</h2>
+                  <div class="section-meta">Sample rows selected from the current filter state</div>
+                </div>
+                <div class="icon-button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16"></path>
+                    <path d="M7 12h10"></path>
+                    <path d="M10 17h4"></path>
+                  </svg>
+                  Sort
+                </div>
+              </div>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Song Title</th>
+                    <th>Artist</th>
+                    <th>Genre</th>
+                    <th>Tempo</th>
+                    <th>Energy</th>
+                    <th>Danceability</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Satellite Heart</td>
+                    <td>Lina Park</td>
+                    <td><span class="genre-pill"><span class="genre-dot"></span>Indie</span></td>
+                    <td>112 BPM</td>
+                    <td>0.62</td>
+                    <td>0.71</td>
+                  </tr>
+                  <tr>
+                    <td>Echo Driver</td>
+                    <td>North Avenue</td>
+                    <td><span class="genre-pill" style="background: rgba(76, 157, 232, 0.12);"><span class="genre-dot" style="background: var(--blue);"></span>Pop</span></td>
+                    <td>124 BPM</td>
+                    <td>0.81</td>
+                    <td>0.76</td>
+                  </tr>
+                  <tr>
+                    <td>Velvet Repeat</td>
+                    <td>Ari Moss</td>
+                    <td><span class="genre-pill" style="background: rgba(241, 200, 106, 0.16);"><span class="genre-dot" style="background: var(--gold);"></span>Alt</span></td>
+                    <td>98 BPM</td>
+                    <td>0.54</td>
+                    <td>0.58</td>
+                  </tr>
+                  <tr>
+                    <td>Sunline Circuit</td>
+                    <td>Mila Grey</td>
+                    <td><span class="genre-pill" style="background: rgba(241, 123, 114, 0.14);"><span class="genre-dot" style="background: var(--coral);"></span>R&amp;B</span></td>
+                    <td>105 BPM</td>
+                    <td>0.59</td>
+                    <td>0.74</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <aside class="card panel detail-panel">
+            <div class="section-copy">
+              <div class="eyebrow">Song Detail Panel</div>
+              <h2 class="section-title">Selected song</h2>
+              <p>When a node is selected, the analyst sees feature intensities and nearest-neighbor matches.</p>
+            </div>
+
+            <div class="selected-song">
+              <div class="eyebrow" style="margin-bottom: 6px;">Active selection</div>
+              <h3>Echo Driver</h3>
+              <p>North Avenue · Pop / Electro</p>
+            </div>
+
+            <div class="stat-list">
+              <div class="stat-row">
+                <span>Tempo</span>
+                <div class="bar"><span style="width: 78%;"></span></div>
+                <strong>124</strong>
+              </div>
+              <div class="stat-row">
+                <span>Energy</span>
+                <div class="bar energy"><span style="width: 81%;"></span></div>
+                <strong>0.81</strong>
+              </div>
+              <div class="stat-row">
+                <span>Dance</span>
+                <div class="bar"><span style="width: 76%;"></span></div>
+                <strong>0.76</strong>
+              </div>
+              <div class="stat-row">
+                <span>Valence</span>
+                <div class="bar valence"><span style="width: 63%;"></span></div>
+                <strong>0.63</strong>
+              </div>
+            </div>
+
+            <div>
+              <div class="section-head" style="margin-bottom: 12px;">
+                <div>
+                  <h2 class="section-title">5 most similar songs</h2>
+                  <div class="section-meta">Cosine similarity on selected audio features</div>
+                </div>
+              </div>
+              <div class="similar-list">
+                <div class="similar-item">
+                  <div>
+                    <strong>Glass Garden</strong>
+                    <span>Nova Blue · Pop</span>
+                  </div>
+                  <div class="similar-score">0.94</div>
+                </div>
+                <div class="similar-item">
+                  <div>
+                    <strong>Night Atlas</strong>
+                    <span>Rae Kline · Alt Pop</span>
+                  </div>
+                  <div class="similar-score">0.91</div>
+                </div>
+                <div class="similar-item">
+                  <div>
+                    <strong>Chroma Signal</strong>
+                    <span>June Harbor · Electro</span>
+                  </div>
+                  <div class="similar-score">0.89</div>
+                </div>
+                <div class="similar-item">
+                  <div>
+                    <strong>Coastline Syntax</strong>
+                    <span>Form District · Indie</span>
+                  </div>
+                  <div class="similar-score">0.88</div>
+                </div>
+                <div class="similar-item">
+                  <div>
+                    <strong>Open Tempo</strong>
+                    <span>Sora Vale · Pop</span>
+                  </div>
+                  <div class="similar-score">0.86</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="network-grid">
+          <article class="card network-panel">
+            <div class="section-head">
+              <div class="section-copy">
+                <div class="eyebrow">Song Similarity Network</div>
+                <h2 class="section-title">Cluster map of related tracks</h2>
+                <p>Nodes represent songs, edges indicate similarity, and cluster color encodes genre families.</p>
+              </div>
+              <div class="icon-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5l7 7-7 7"></path>
+                </svg>
+                Expand
+              </div>
+            </div>
+
+            <div class="legend">
+              <span><i class="pop"></i>Pop</span>
+              <span><i class="indie"></i>Indie</span>
+              <span><i class="rnb"></i>R&amp;B</span>
+              <span><i class="alt"></i>Alt</span>
+            </div>
+
+            <div class="network-stage">
+              <svg width="100%" height="100%" viewBox="0 0 720 340" aria-label="Song similarity network">
+                <g stroke="rgba(50, 67, 86, 0.18)" stroke-width="2">
+                  <line x1="140" y1="160" x2="230" y2="110"></line>
+                  <line x1="140" y1="160" x2="255" y2="210"></line>
+                  <line x1="140" y1="160" x2="95" y2="98"></line>
+                  <line x1="230" y1="110" x2="312" y2="88"></line>
+                  <line x1="255" y1="210" x2="342" y2="232"></line>
+                  <line x1="312" y1="88" x2="402" y2="126"></line>
+                  <line x1="342" y1="232" x2="438" y2="236"></line>
+                  <line x1="402" y1="126" x2="488" y2="82"></line>
+                  <line x1="402" y1="126" x2="472" y2="168"></line>
+                  <line x1="472" y1="168" x2="560" y2="196"></line>
+                  <line x1="488" y1="82" x2="570" y2="72"></line>
+                  <line x1="95" y1="98" x2="178" y2="56"></line>
+                  <line x1="438" y1="236" x2="528" y2="266"></line>
+                  <line x1="342" y1="232" x2="264" y2="288"></line>
+                  <line x1="472" y1="168" x2="438" y2="236"></line>
+                  <line x1="230" y1="110" x2="318" y2="156"></line>
+                  <line x1="318" y1="156" x2="402" y2="126"></line>
+                  <line x1="318" y1="156" x2="342" y2="232"></line>
+                </g>
+
+                <g>
+                  <circle cx="95" cy="98" r="14" fill="#5ab58f"></circle>
+                  <circle cx="140" cy="160" r="22" fill="#4c9de8"></circle>
+                  <circle cx="178" cy="56" r="12" fill="#5ab58f"></circle>
+                  <circle cx="230" cy="110" r="16" fill="#5ab58f"></circle>
+                  <circle cx="255" cy="210" r="15" fill="#f17b72"></circle>
+                  <circle cx="264" cy="288" r="13" fill="#f1c86a"></circle>
+                  <circle cx="312" cy="88" r="12" fill="#4c9de8"></circle>
+                  <circle cx="318" cy="156" r="14" fill="#5bc2bf"></circle>
+                  <circle cx="342" cy="232" r="18" fill="#f17b72"></circle>
+                  <circle cx="402" cy="126" r="20" fill="#4c9de8"></circle>
+                  <circle cx="438" cy="236" r="16" fill="#f1c86a"></circle>
+                  <circle cx="472" cy="168" r="17" fill="#5bc2bf"></circle>
+                  <circle cx="488" cy="82" r="14" fill="#f17b72"></circle>
+                  <circle cx="528" cy="266" r="13" fill="#f1c86a"></circle>
+                  <circle cx="560" cy="196" r="18" fill="#5bc2bf"></circle>
+                  <circle cx="570" cy="72" r="12" fill="#4c9de8"></circle>
+                </g>
+
+                <g fill="#ffffff" font-family="Avenir Next, Segoe UI, sans-serif" font-size="11" font-weight="700">
+                  <text x="124" y="165">Echo</text>
+                  <text x="390" y="131">Glass</text>
+                  <text x="330" y="237">Velvet</text>
+                  <text x="547" y="201">Signal</text>
+                </g>
+              </svg>
+
+              <div class="tooltip">
+                <small>Hovered node</small>
+                <strong>Glass Garden</strong>
+                <p>Nova Blue · Pop · 121 BPM</p>
+                <div class="tooltip-grid">
+                  <div><strong>0.79</strong>Energy</div>
+                  <div><strong>0.74</strong>Dance</div>
+                  <div><strong>0.68</strong>Valence</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <aside class="card compare-panel">
+            <div class="section-copy">
+              <div class="eyebrow">Feature Comparison Chart</div>
+              <h2 class="section-title">Selected-song comparison</h2>
+              <p>A compact view for comparing audio features across candidate matches.</p>
+            </div>
+
+            <div class="chart-card">
+              <svg width="100%" height="220" viewBox="0 0 320 220" aria-label="Radar chart comparison">
+                <g fill="none" stroke="rgba(50, 67, 86, 0.14)" stroke-width="1.5">
+                  <polygon points="160,18 252,74 252,146 160,202 68,146 68,74"></polygon>
+                  <polygon points="160,44 228,85 228,135 160,176 92,135 92,85"></polygon>
+                  <polygon points="160,70 204,96 204,124 160,150 116,124 116,96"></polygon>
+                  <line x1="160" y1="18" x2="160" y2="202"></line>
+                  <line x1="68" y1="74" x2="252" y2="146"></line>
+                  <line x1="68" y1="146" x2="252" y2="74"></line>
+                </g>
+                <g fill="rgba(76, 157, 232, 0.24)" stroke="#4c9de8" stroke-width="2.5">
+                  <polygon points="160,40 226,90 214,130 160,170 104,132 108,92"></polygon>
+                </g>
+                <g fill="rgba(241, 123, 114, 0.2)" stroke="#f17b72" stroke-width="2.5">
+                  <polygon points="160,56 210,94 204,122 160,156 122,128 116,98"></polygon>
+                </g>
+                <g fill="#6b7785" font-family="Avenir Next, Segoe UI, sans-serif" font-size="11" font-weight="700">
+                  <text x="145" y="12">Tempo</text>
+                  <text x="252" y="76">Dance</text>
+                  <text x="252" y="154">Valence</text>
+                  <text x="145" y="216">Acoustic</text>
+                  <text x="40" y="154">Speech</text>
+                  <text x="44" y="76">Energy</text>
+                </g>
+              </svg>
+              <div class="compare-key">
+                <span><i class="a"></i>Echo Driver</span>
+                <span><i class="b"></i>Glass Garden</span>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="section-head" style="margin-bottom: 14px;">
+                <div>
+                  <h2 class="section-title">Bar comparison</h2>
+                  <div class="section-meta">Feature-by-feature comparison against nearest match</div>
+                </div>
+              </div>
+              <div class="compare-list">
+                <div class="compare-row">
+                  <strong style="color: var(--text);">Tempo</strong>
+                  <div class="track a"><span style="width: 78%;"></span></div>
+                  <div class="track b"><span style="width: 74%;"></span></div>
+                </div>
+                <div class="compare-row">
+                  <strong style="color: var(--text);">Energy</strong>
+                  <div class="track a"><span style="width: 81%;"></span></div>
+                  <div class="track b"><span style="width: 79%;"></span></div>
+                </div>
+                <div class="compare-row">
+                  <strong style="color: var(--text);">Dance</strong>
+                  <div class="track a"><span style="width: 76%;"></span></div>
+                  <div class="track b"><span style="width: 72%;"></span></div>
+                </div>
+                <div class="compare-row">
+                  <strong style="color: var(--text);">Valence</strong>
+                  <div class="track a"><span style="width: 63%;"></span></div>
+                  <div class="track b"><span style="width: 68%;"></span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-hint">
+              <span><strong>Analysis mode:</strong> hover states, selection context, and compare views are surfaced in a single dashboard frame.</span>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
