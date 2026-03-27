@@ -95,15 +95,28 @@ export default function NetworkGraph({ network }) {
                         y1={link.sourceNode.y}
                         x2={link.targetNode.x}
                         y2={link.targetNode.y}
-                        stroke="#94a3b8"
+                        stroke={link.mode === "descriptor" ? "#cbd5e1" : "#2563eb"}
                         strokeWidth={Math.max(1, (link.weight ?? 0.5) * 2)}
-                        opacity="0.65"
+                        opacity={link.mode === "descriptor" ? "0.45" : "0.7"}
+                        strokeDasharray={link.mode === "descriptor" ? "4 4" : undefined}
                     />
                 ))}
 
                 {positionedNodes.map((node) => (
                     <g key={node.id}>
-                        <circle cx={node.x} cy={node.y} r="7" fill="#2563eb" />
+                        <circle
+                            cx={node.x}
+                            cy={node.y}
+                            r="7"
+                            fill={nodeColor(node.dominant_mood)}
+                            stroke={node.has_essentia_features ? "#0f172a" : "#ffffff"}
+                            strokeWidth={node.has_essentia_features ? 1.5 : 1}
+                        />
+                        <title>
+                            {`${node.label} • ${formatMood(node.dominant_mood)} • ${
+                                node.has_essentia_features ? "Essentia ready" : "Descriptor-only"
+                            }`}
+                        </title>
                         <text
                             x={node.x + 10}
                             y={node.y + 4}
@@ -117,6 +130,23 @@ export default function NetworkGraph({ network }) {
             </svg>
         </div>
     );
+}
+
+function nodeColor(mood) {
+    const palette = {
+        happy: "#f59e0b",
+        party: "#ef4444",
+        relaxed: "#14b8a6",
+        sad: "#3b82f6",
+        unknown: "#64748b",
+    };
+
+    return palette[mood] || palette.unknown;
+}
+
+function formatMood(mood) {
+    if (!mood || mood === "unknown") return "unknown mood";
+    return `${mood} mood`;
 }
 
 const styles = {

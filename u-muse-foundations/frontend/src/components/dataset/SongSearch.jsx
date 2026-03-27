@@ -30,10 +30,9 @@ export default function SongSearch({ onImportSuccess }) {
             });
 
             setMessage(res.data.message || "Song imported");
-            if (res.data.feature_error) {
-                // Surface provider-side feature failures so users know why
-                // downstream metrics might still show as "N/A".
-                setWarning(`Imported, but audio features were not fetched: ${res.data.feature_error}`);
+            const warnings = Array.isArray(res.data.warnings) ? res.data.warnings : [];
+            if (warnings.length > 0) {
+                setWarning(warnings.join(" "));
             }
             setQuery("");
 
@@ -56,6 +55,10 @@ export default function SongSearch({ onImportSuccess }) {
     return (
         <div style={styles.container}>
             <h2>Import Song</h2>
+            <p style={styles.helper}>
+                Uses Spotify to identify the exact track first, then enriches it with
+                MusicBrainz, AcousticBrainz, and Deezer metadata, descriptors, and preview clips.
+            </p>
 
             <form onSubmit={handleSubmit} style={styles.form}>
                 <input
@@ -81,6 +84,11 @@ export default function SongSearch({ onImportSuccess }) {
 const styles = {
     container: {
         marginBottom: "2rem",
+    },
+    helper: {
+        marginTop: "-0.25rem",
+        color: "#6b7280",
+        fontSize: "0.95rem",
     },
     form: {
         display: "flex",
@@ -112,5 +120,6 @@ const styles = {
         border: "1px solid #fde68a",
         borderRadius: "8px",
         padding: "0.5rem 0.75rem",
+        lineHeight: 1.5,
     },
 };

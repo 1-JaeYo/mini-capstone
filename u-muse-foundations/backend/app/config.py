@@ -16,3 +16,10 @@ class Config:
     # Spotify credentials are optional but required for live imports.
     SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
     SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+
+    # MusicBrainz asks clients to send a descriptive user agent.
+    MUSIC_METADATA_USER_AGENT = os.getenv(
+        "MUSIC_METADATA_USER_AGENT",
+        "U-Muse Foundations/1.0 (local metadata lookup)",
+    )
+    MUSIC_METADATA_CONTACT = os.getenv("MUSIC_METADATA_CONTACT")

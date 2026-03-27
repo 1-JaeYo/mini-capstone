@@ -52,6 +52,11 @@ export default function SimilarSongsList({ result, loading, error }) {
                                 <strong>{song.title}</strong> by {song.artist_name}
                             </div>
                             <div style={styles.score}>Similarity: {song.similarity_score}</div>
+                            {song.shared_features?.length ? (
+                                <div style={styles.shared}>
+                                    Compared on: {song.shared_features.join(", ")}
+                                </div>
+                            ) : null}
                         </li>
                     ))}
                 </ul>
@@ -94,5 +99,10 @@ const styles = {
         color: "#4b5563",
         fontSize: "0.9rem",
         marginTop: "0.25rem",
+    },
+    shared: {
+        color: "#6b7280",
+        fontSize: "0.85rem",
+        marginTop: "0.2rem",
     },
 };

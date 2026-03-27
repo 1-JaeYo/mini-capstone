@@ -4,7 +4,7 @@ import client from "../api/client";
 /**
  * Fetch similar-song analytics for the currently selected song.
  */
-export function useSimilarity(songId) {
+export function useSimilarity(songId, refreshKey = 0) {
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -32,7 +32,7 @@ export function useSimilarity(songId) {
         }
 
         fetchSimilarity();
-    }, [songId]);
+    }, [songId, refreshKey]);
 
     return { result, loading, error };
 }

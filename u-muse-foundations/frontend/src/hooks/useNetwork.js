@@ -4,7 +4,7 @@ import client from "../api/client";
 /**
  * Load the node/link graph payload for the network page.
  */
-export function useNetwork() {
+export function useNetwork({ includeDescriptorFallback = false, topK = 3 } = {}) {
     const [network, setNetwork] = useState({ nodes: [], links: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -15,7 +15,12 @@ export function useNetwork() {
                 setLoading(true);
                 setError("");
 
-                const response = await client.get("/network/");
+                const response = await client.get("/network/", {
+                    params: {
+                        include_descriptor_fallback: includeDescriptorFallback,
+                        top_k: topK,
+                    },
+                });
                 setNetwork(response.data);
             } catch (err) {
                 console.error(err);
@@ -26,7 +31,7 @@ export function useNetwork() {
         }
 
         fetchNetwork();
-    }, []);
+    }, [includeDescriptorFallback, topK]);
 
     return { network, loading, error };
 }

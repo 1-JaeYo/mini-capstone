@@ -15,12 +15,18 @@ export default function SummaryCards({ songs }) {
         return (sum / validValues.length).toFixed(2);
     };
 
+    const previewCount = songs.filter((song) => Boolean(song.preview_url)).length;
+    const acousticProfileCount = songs.filter(
+        (song) => typeof song.tempo === "number" || typeof song.danceability === "number"
+    ).length;
+
     const cards = [
         { label: "Total Songs", value: totalSongs },
+        { label: "Songs With Preview", value: previewCount },
+        { label: "Songs With Acoustic Profile", value: acousticProfileCount },
         { label: "Average Tempo", value: getAverage("tempo") },
-        { label: "Average Energy", value: getAverage("energy") },
-        { label: "Average Danceability", value: getAverage("danceability") },
-        { label: "Average Valence", value: getAverage("valence") },
+        { label: "Average Gain", value: getAverage("gain") },
+        { label: "Average Energy Proxy", value: getAverage("energy") },
     ];
 
     return (
