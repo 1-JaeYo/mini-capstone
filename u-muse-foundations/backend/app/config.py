@@ -10,10 +10,23 @@ load_dotenv()
 class Config:
     """Configuration values loaded from environment variables."""
 
-    # Database defaults to the local SQLite file in backend/instance.
-    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///u_muse.db")
+    # Use Postgres in hosted/serverless environments and SQLite locally.
+    DATABASE_URL = os.getenv("DATABASE_URL")
+    if not DATABASE_URL:
+        if os.getenv("VERCEL"):
+            raise RuntimeError(
+                "DATABASE_URL is required in the Vercel environment. "
+                "Configure it in Vercel Project Settings -> Environment Variables."
+            )
+        DATABASE_URL = "sqlite:///u_muse.db"
+
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    elif "://" in DATABASE_URL and not DATABASE_URL.startswith(("sqlite://", "postgresql://")):
+        raise RuntimeError(
+            "DATABASE_URL must start with sqlite:// or postgresql://. "
+            "Check for a typo in the configured connection string."
+        )
 
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
