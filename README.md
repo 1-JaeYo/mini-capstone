@@ -82,23 +82,6 @@ cd u-muse-foundations/frontend
 npm run dev
 ```
 
-## Environment Notes
-
-The backend reads configuration from:
-
-- [`u-muse-foundations/backend/.env`](./u-muse-foundations/backend/.env)
-
-Important variables include:
-
-- `SPOTIFY_CLIENT_ID`
-- `SPOTIFY_CLIENT_SECRET`
-- `MUSIC_METADATA_USER_AGENT`
-- `MUSIC_METADATA_CONTACT` (optional)
-
-The backend database defaults to a local SQLite file in:
-
-- `u-muse-foundations/backend/instance/u_muse.db`
-
 ## Fresh Setup
 
 If you need to recreate the environment instead of using the existing project setup:
@@ -121,22 +104,6 @@ npm install
 npm run dev
 ```
 
-## Backend API Areas
-
-The Flask app exposes these main route groups:
-
-- `/api/songs`
-- `/api/imports`
-- `/api/analytics`
-- `/api/network`
-- `/api/analyze`
-
 ## Current State
 
 This is the final version of the project prepared for presentation/demo. The system is designed as a working research prototype rather than a production deployment.
-
-## Notes
-
-- Deezer preview links can expire, so the backend refreshes them on demand.
-- AcousticBrainz coverage is incomplete, so some songs will not have all descriptor fields.
-- Similarity prefers Essentia-based vectors when available and falls back to descriptor matching otherwise.
