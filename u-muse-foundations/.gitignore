@@ -24,3 +24,5 @@ backend/instance/*.sqlite3
 .mypy_cache/
 .coverage
 .coverage.*
+.vercel
+.env*.local
