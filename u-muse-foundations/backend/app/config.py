@@ -20,11 +20,17 @@ class Config:
             )
         DATABASE_URL = "sqlite:///u_muse.db"
 
+    # Force SQLAlchemy to use psycopg v3, which is what this project installs.
     if DATABASE_URL.startswith("postgres://"):
-        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
-    elif "://" in DATABASE_URL and not DATABASE_URL.startswith(("sqlite://", "postgresql://")):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+    elif DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+    elif "://" in DATABASE_URL and not DATABASE_URL.startswith(
+        ("sqlite://", "postgresql+psycopg://")
+    ):
         raise RuntimeError(
-            "DATABASE_URL must start with sqlite:// or postgresql://. "
+            "DATABASE_URL must start with sqlite://, postgres://, "
+            "postgresql://, or postgresql+psycopg://. "
             "Check for a typo in the configured connection string."
         )
 
